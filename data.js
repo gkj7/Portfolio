@@ -101,5 +101,11 @@ const PROJECTS = [
     tags: ["Android"],
     description: "An Android app that tracks phone usage and turns it into a clean daily timeline. A simple, well-scoped app built for everyday use.",
     link: "https://github.com/gkj7/activity-logger"
+  },
+  {
+    title: "Personal Portfolio",
+    tags: ["HTML", "CSS", "JavaScript"],
+    description: "My professional portfolio website, built with HTML, CSS, and JavaScript, and hosted on Vercel.",
+    link: "https://github.com/gkj7/portfolio-v3"
   }
 ];
