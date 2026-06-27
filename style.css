@@ -154,12 +154,37 @@ h2 {
   border: 1px solid var(--border);
   background: var(--surface);
   border-radius: var(--radius-lg);
-  padding: 3.5rem 4rem;
+  padding: 2rem 4rem 3.5rem;
   width: 100%;
   position: relative;
   overflow: hidden;
 }
 .overview-card:hover { border-color: var(--border-accent); }
+
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding-bottom: 16px;
+  margin-bottom: 2.4rem;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  z-index: 2;
+}
+.status-item { flex: 1; white-space: nowrap; }
+.status-item:first-child { text-align: left; }
+.status-item:last-child { text-align: right; }
+.status-item-center { text-align: center; }
+.status-secure { color: #3ED98A; font-weight: 600; }
+
+@media (max-width: 640px) {
+  .status-bar { font-size: 0.6rem; letter-spacing: 0.04em; gap: 0.4rem; }
+}
 
 .overview-inner {
   display: flex;
@@ -188,11 +213,19 @@ h2 {
 .chip {
   font-family: var(--font-mono);
   font-size: 0.82rem;
+  width: 230px;
+  box-sizing: border-box;
   padding: 0.5rem 1.1rem;
   border-radius: 99px;
   background: var(--accent-soft);
   border: 1px solid var(--border-accent);
   color: var(--accent);
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .chip { width: 195px; font-size: 0.74rem; }
 }
 
 .overview-tagline {
@@ -203,7 +236,12 @@ h2 {
 
 .overview-photo {
   flex-shrink: 0;
+  width: 320px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
 }
 
 /* Glow ring — a slow-spinning conic gradient sitting behind the
@@ -212,8 +250,11 @@ h2 {
 .overview-photo::before {
   content: '';
   position: absolute;
-  inset: -22px;
-  border-radius: calc(var(--radius-lg) + 14px);
+  top: 50%;
+  left: 50%;
+  width: 410px;
+  height: 410px;
+  border-radius: 50%;
   background: conic-gradient(
     from 0deg,
     var(--accent),
@@ -231,11 +272,12 @@ h2 {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .overview-photo::before { animation: none; }
+  .overview-photo::before { animation: none; transform: translate(-50%, -50%); }
 }
 
 .photo-card {
@@ -258,6 +300,80 @@ h2 {
   object-fit: cover;
   object-position: top center;
 }
+
+/* ============================================================
+   TERMINAL DECODE BOX — sits under the photo, types out a hex
+   byte sequence then "decodes" it into the name, like a terminal
+   session. Loops on a slow interval so it stays alive.
+   ============================================================ */
+.terminal-box {
+  width: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 18px;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  letter-spacing: 0.3px;
+  color: var(--text);
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+}
+
+.terminal-prompt {
+  color: var(--accent);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.terminal-text {
+  white-space: pre;
+}
+
+.terminal-text .slot {
+  display: inline-block;
+  transition: color 0.25s var(--ease), opacity 0.3s var(--ease), letter-spacing 0.3s var(--ease);
+}
+
+.terminal-text .slot.locked-in {
+  color: var(--accent);
+}
+
+.terminal-text .slot.collapsing {
+  opacity: 0;
+  letter-spacing: -0.4em;
+}
+
+.terminal-text .dec-label {
+  font-size: 0.55em;
+  vertical-align: sub;
+  color: var(--text-faint);
+  margin-left: 1px;
+}
+
+.terminal-cursor {
+  color: var(--accent);
+  font-size: 0.78em;
+  line-height: 1;
+  animation: termBlink 1s step-end infinite;
+}
+
+@keyframes termBlink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .terminal-cursor { animation: none; opacity: 1; }
+}
+
 
 /* Shine sweep — a soft diagonal highlight glides across the photo
    every 15s, then stays out of frame until the next pass.
@@ -330,6 +446,9 @@ h2 {
   .chip-row { justify-content: center; }
   .overview-tagline { max-width: 100%; }
   .photo-card { width: 220px; height: 270px; }
+  .overview-photo::before { width: 320px; height: 320px; }
+  .overview-photo { width: 250px; }
+  .terminal-box { font-size: 0.82rem; padding: 10px 14px; }
 }
 
 /* ============================================================

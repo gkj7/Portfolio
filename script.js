@@ -207,3 +207,144 @@ tiltCards.forEach((card) => {
 /* Background is a static image (.bg-lines-fixed in style.css),
    fixed to the viewport. No animation, no scroll/cursor reactivity. */
 
+/* ============================================================
+   TERMINAL DECODE BOX — types out a hex byte sequence like a
+   terminal session, then "decodes" each byte into its letter,
+   spelling out GOKUL K J. Loops indefinitely on a slow cycle.
+   ============================================================ */
+const TERMINAL_SLOTS = [
+  { chars: "{", final: "" },
+  { chars: " ", final: "" },
+  { chars: "47", final: "G" },
+  { chars: " ", final: "" },
+  { chars: "4F", final: "O" },
+  { chars: " ", final: "" },
+  { chars: "4B", final: "K" },
+  { chars: " ", final: "" },
+  { chars: "55", final: "U" },
+  { chars: " ", final: "" },
+  { chars: "4C", final: "L" },
+  { chars: "-", final: " " },
+  { chars: "4B", final: "K" },
+  { chars: "-", final: " " },
+  { chars: "4A", final: "J" },
+  { chars: "}", final: "", closeBrace: true },
+];
+
+const SCRAMBLE_CHARSET = "0123456789ABCDEF$#%&*+=-";
+
+function termDelay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function typeTerminal(textEl) {
+  textEl.innerHTML = "";
+  const slotEls = [];
+
+  for (const slotData of TERMINAL_SLOTS) {
+    const slotEl = document.createElement("span");
+    slotEl.className = "slot";
+    textEl.appendChild(slotEl);
+    slotEls.push(slotEl);
+
+    for (const ch of slotData.chars) {
+      slotEl.textContent += ch;
+      await termDelay(45);
+    }
+
+    if (slotData.closeBrace) {
+      const sub = document.createElement("sub");
+      sub.className = "dec-label";
+      sub.textContent = "10";
+      slotEl.appendChild(sub);
+    }
+  }
+
+  return slotEls;
+}
+
+function randomScramble(length) {
+  let out = "";
+  for (let i = 0; i < length; i++) {
+    out += SCRAMBLE_CHARSET[Math.floor(Math.random() * SCRAMBLE_CHARSET.length)];
+  }
+  return out;
+}
+
+async function decodeSlot(slotEl, slotData, startDelay) {
+  await termDelay(startDelay);
+
+  for (let i = 0; i < 7; i++) {
+    slotEl.textContent = randomScramble(slotData.chars.length);
+    if (slotData.closeBrace) {
+      const sub = document.createElement("sub");
+      sub.className = "dec-label";
+      sub.textContent = "10";
+      slotEl.appendChild(sub);
+    }
+    await termDelay(40);
+  }
+
+  if (slotData.final === "") {
+    slotEl.classList.add("collapsing");
+    await termDelay(280);
+    slotEl.textContent = "";
+    slotEl.classList.remove("collapsing");
+  } else {
+    slotEl.textContent = slotData.final;
+    slotEl.classList.add("locked-in");
+    await termDelay(260);
+    slotEl.classList.remove("locked-in");
+  }
+}
+
+async function decodeTerminal(slotEls) {
+  await Promise.all(
+    TERMINAL_SLOTS.map((slotData, i) => decodeSlot(slotEls[i], slotData, i * 70))
+  );
+}
+
+async function runTerminalLoop(textEl) {
+  while (true) {
+    const slotEls = await typeTerminal(textEl);
+    await termDelay(700);
+    await decodeTerminal(slotEls);
+    await termDelay(3200);
+    textEl.innerHTML = "";
+    await termDelay(500);
+  }
+}
+
+const terminalTextEl = document.getElementById("terminalText");
+if (terminalTextEl) {
+  runTerminalLoop(terminalTextEl);
+}
+
+/* ============================================================
+   UPTIME COUNTER — counts up from 00:00:00 the moment the page
+   loads, formatted HH:MM:SS.
+   ============================================================ */
+function startUptimeCounter() {
+  const uptimeEl = document.getElementById("uptimeValue");
+  if (!uptimeEl) return;
+
+  const startTime = Date.now();
+
+  function pad(n) {
+    return n.toString().padStart(2, "0");
+  }
+
+  function tick() {
+    const elapsedSec = Math.floor((Date.now() - startTime) / 1000);
+    const hrs = Math.floor(elapsedSec / 3600);
+    const mins = Math.floor((elapsedSec % 3600) / 60);
+    const secs = elapsedSec % 60;
+    uptimeEl.textContent = `${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
+  }
+
+  tick();
+  setInterval(tick, 1000);
+}
+
+startUptimeCounter();
+
