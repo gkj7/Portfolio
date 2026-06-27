@@ -26,33 +26,6 @@ const RESEARCH = [
   }
 ];
 
-const TOOLS = [
-  {
-    category: "Security Tools",
-    items: ["Nmap", "Wireshark", "Metasploit", "Burp Suite", "OWASP ZAP", "hashcat", "Hydra"]
-  },
-  {
-    category: "Operating Systems",
-    items: ["Kali Linux", "Ubuntu", "Windows", "Debian", "Fedora", "Arch"]
-  },
-  {
-    category: "Development",
-    items: ["Python", "Java", "JavaScript", "React", "Node.js", "Git", "C/C++", "Bash", "SvelteKit"]
-  },
-  {
-    category: "Forensics",
-    items: ["Autopsy", "Volatility", "Sleuth Kit", "FTK Imager", "HashCalc", "ExifTool"]
-  },
-  {
-    category: "AI & Machine Learning",
-    items: ["PyTorch", "Hugging Face"]
-  },
-  {
-    category: "Databases",
-    items: ["PostgreSQL", "MySQL", "SQLite", "MongoDB"]
-  }
-];
-
 const EDUCATION = [
   {
     degree: "Bachelor of Technology in Computer Science and Engineering (Cyber Security)",
@@ -62,7 +35,7 @@ const EDUCATION = [
     score: "CGPA: 7.9"
   },
   {
-    degree: "Class 12, Computer Science",
+    degree: "Class 12 Computer Science",
     institution: "Mount Mary Public School & Junior College, Maalam, Kottayam",
     board: "Central Board of Secondary Education (CBSE)",
     years: "2021 - 2022",

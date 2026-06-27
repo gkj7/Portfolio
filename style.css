@@ -458,7 +458,8 @@ h2 {
   border: 1px solid var(--border);
   background: var(--surface);
   border-radius: var(--radius-lg);
-  padding: 2.4rem;
+  padding: 2.4rem 2.4rem 2.6rem;
+  min-height: 360px;
 }
 .about-card:hover { border-color: var(--border-accent); }
 .about-card p {
@@ -474,6 +475,9 @@ h2 {
   gap: 0.8rem;
 }
 .link-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
   font-family: var(--font-mono);
   font-size: 0.88rem;
   padding: 0.7rem 1.4rem;
@@ -481,6 +485,13 @@ h2 {
   border: 1px solid var(--border);
   background: var(--surface-2);
   transition: border-color 0.25s var(--ease), transform 0.25s var(--ease), background 0.25s var(--ease);
+}
+.link-chip-arrow {
+  display: inline-block;
+  transition: transform 0.25s var(--ease);
+}
+.link-chip:hover .link-chip-arrow {
+  transform: translateX(4px);
 }
 .link-chip:hover {
   border-color: var(--border-accent);
@@ -496,6 +507,188 @@ h2 {
 .link-chip-accent:hover {
   background: var(--accent);
   opacity: 0.9;
+}
+
+.about-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5rem;
+  min-height: 100%;
+}
+.about-text { flex: 1; min-width: 0; }
+.about-side {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+/* ---- Flip card: key ⇄ passcode form, and key→QR once solved ---- */
+.flip-card {
+  width: 220px;
+  height: 220px;
+  perspective: 1000px;
+}
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.7s var(--ease);
+  transform-style: preserve-3d;
+}
+.flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+.flip-card.shake .flip-card-inner { animation: flipCardShake 0.5s ease; }
+@keyframes flipCardShake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-8px); }
+  40%      { transform: translateX(7px); }
+  60%      { transform: translateX(-5px); }
+  80%      { transform: translateX(3px); }
+}
+
+.flip-card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  cursor: pointer;
+  transition: border-color 0.25s var(--ease);
+}
+.flip-card:hover .flip-card-face { border-color: var(--border-accent); }
+.flip-card-front { }
+.flip-card-back {
+  transform: rotateY(180deg);
+  cursor: default;
+  padding: 1.2rem;
+  gap: 1rem;
+}
+
+.key-icon {
+  width: 84px;
+  height: 84px;
+  color: var(--accent);
+  filter: drop-shadow(0 0 6px var(--accent-glow));
+  transition: opacity 0.3s var(--ease);
+  animation: keyDoubleJump 3s ease-in-out infinite;
+}
+.flip-card.solved .key-icon { display: none; }
+
+@keyframes keyDoubleJump {
+  0%, 24%, 100% { transform: translateY(0); }
+  6%  { transform: translateY(-12px); }
+  12% { transform: translateY(0); }
+  18% { transform: translateY(-12px); }
+}
+
+.key-star {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 20px;
+  height: 20px;
+  color: #fff;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 8px var(--accent-glow));
+  opacity: 0;
+  transform: scale(0) rotate(-20deg);
+  transform-origin: center;
+  pointer-events: none;
+  z-index: 3;
+  animation: keyStarSpin 4s ease-in-out infinite;
+}
+.flip-card.solved .key-star { display: none; }
+
+@keyframes keyStarSpin {
+  0%, 85%   { opacity: 0; transform: scale(0) rotate(-20deg); }
+  88%       { opacity: 1; transform: scale(1.15) rotate(15deg); }
+  92%       { opacity: 1; transform: scale(1) rotate(45deg); }
+  97%, 100% { opacity: 0; transform: scale(0.6) rotate(70deg); }
+}
+
+.qr-image {
+  display: none;
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+  border-radius: 10px;
+}
+.flip-card.solved .qr-image { display: block; }
+.flip-card.solved .flip-card-front { cursor: pointer; }
+
+.passcode-label {
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+  color: var(--text-dim);
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+.passcode-inputs { display: flex; gap: 0.55rem; }
+.passcode-digit {
+  width: 38px;
+  height: 48px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  outline: none;
+  transition: border-color 0.2s var(--ease);
+}
+.passcode-digit:focus { border-color: var(--border-accent); }
+
+.passcode-submit {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.5rem 1.3rem;
+  border-radius: 99px;
+  border: 1px solid var(--border-accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+  cursor: pointer;
+  transition: background 0.2s var(--ease), transform 0.2s var(--ease);
+}
+.passcode-submit:hover { background: var(--accent); color: #0B0B10; }
+.passcode-submit:active { transform: scale(0.96); }
+
+.passcode-message {
+  height: 2.6em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  text-align: center;
+  max-width: 220px;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+.passcode-message.visible { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .flip-card-inner, .flip-card.shake .flip-card-inner { transition: none; animation: none; }
+  .key-icon, .key-star { animation: none; }
+  .key-star { opacity: 0; }
+}
+
+@media (max-width: 860px) {
+  .about-layout { flex-direction: column; align-items: center; }
+  .about-text { max-width: 100%; text-align: left; }
 }
 
 /* ============================================================
@@ -795,62 +988,6 @@ h2 {
 }
 
 /* ============================================================
-   TOOLS
-   ============================================================ */
-.tools-card {
-  border: 1px solid var(--border);
-  background: var(--surface);
-  border-radius: var(--radius-lg);
-  padding: 2.2rem;
-}
-.tools-card:hover { border-color: var(--border-accent); }
-
-.tools-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.3rem;
-}
-
-.tool-card {
-  border: 1px solid var(--border);
-  background: var(--surface-2);
-  border-radius: var(--radius-md);
-  padding: 1.6rem;
-}
-
-.tool-category {
-  font-family: var(--font-mono);
-  font-size: 0.92rem;
-  font-weight: 600;
-  color: var(--accent);
-  letter-spacing: 0.01em;
-  margin-bottom: 1.1rem;
-}
-
-.tool-pill-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-}
-.tool-pill {
-  font-family: var(--font-mono);
-  font-size: 0.84rem;
-  padding: 0.5rem 1rem;
-  border-radius: 99px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  transition: border-color 0.25s var(--ease), background 0.25s var(--ease);
-}
-.tool-pill:hover {
-  border-color: var(--border-accent);
-  background: var(--accent-soft);
-}
-
-@media (max-width: 860px) {
-  .tools-grid { grid-template-columns: 1fr; }
-}
-
-/* ============================================================
    EDUCATION
    ============================================================ */
 .education-card {
@@ -865,9 +1002,51 @@ h2 {
   display: flex;
   flex-direction: column;
   gap: 1.3rem;
+  position: relative;
+}
+.education-list::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 9px;
+  width: 1px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--accent) 0px,
+    var(--accent) 4px,
+    transparent 4px,
+    transparent 9px
+  );
+  opacity: 0.55;
+}
+
+.edu-row {
+  display: flex;
+  gap: 1.2rem;
+  position: relative;
+}
+.edu-rail {
+  width: 18px;
+  flex-shrink: 0;
+  position: relative;
+}
+.edu-dot {
+  position: absolute;
+  top: 1.8rem;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 4px var(--surface), 0 0 8px var(--accent-glow);
+  z-index: 1;
 }
 
 .edu-card {
+  flex: 1;
+  min-width: 0;
   border: 1px solid var(--border);
   background: var(--surface-2);
   border-radius: var(--radius-md);
@@ -919,10 +1098,19 @@ h2 {
   border: 1px solid var(--border);
   background: var(--surface);
   border-radius: var(--radius-lg);
-  padding: 1.8rem;
+  padding: 1.8rem 1.8rem 2.6rem;
   transition: border-color 0.25s var(--ease);
 }
 .cert-tile:hover { border-color: var(--border-accent); }
+
+.cert-badge {
+  position: absolute;
+  bottom: 1.2rem;
+  right: 1.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--text-faint);
+}
 
 .cert-arrow {
   position: absolute;
@@ -959,20 +1147,43 @@ h2 {
 }
 
 /* ============================================================
-   CONTACT (styled as a footer block: icons, section nav, copyright)
+   CONTACT (styled as a card: heading, icons, dotted nav, divider,
+   copyright + name)
    ============================================================ */
-.contact-footer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
+.contact-card {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 2.6rem 2.8rem;
+  transition: border-color 0.25s var(--ease);
+}
+.contact-card:hover { border-color: var(--border-accent); }
+
+.contact-heading {
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.contact-tagline {
   text-align: center;
-  padding: 1rem 0 0.5rem;
+  color: var(--text-dim);
+  font-size: 0.96rem;
+  max-width: 480px;
+  margin: 0 auto 2.2rem;
 }
 
 .contact-icons {
   display: flex;
-  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
+  margin-bottom: 2.4rem;
+}
+.icon-sep {
+  width: 1px;
+  height: 22px;
+  background: var(--border);
+  opacity: 0.5;
 }
 .icon-circle {
   display: flex;
@@ -1001,7 +1212,9 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1.8rem;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 1.8rem;
 }
 .contact-nav-links a {
   font-family: var(--font-mono);
@@ -1012,17 +1225,37 @@ h2 {
 .contact-nav-links a:hover {
   color: var(--accent);
 }
+.nav-dot {
+  color: var(--accent);
+  font-size: 0.55rem;
+}
 
-.contact-copyright {
+.contact-divider {
+  height: 1px;
+  width: 100%;
+  background: var(--border-accent);
+  opacity: 0.35;
+  margin-bottom: 1.6rem;
+}
+
+.contact-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.8rem;
   font-family: var(--font-mono);
   font-size: 0.82rem;
   color: var(--text-dim);
-  padding-top: 1.6rem;
-  border-top: 1px solid var(--border);
-  width: 100%;
-  max-width: 640px;
+}
+.contact-name {
+  color: var(--text-dim);
+  font-weight: 700;
+  letter-spacing: 0.06em;
 }
 
 @media (max-width: 640px) {
-  .contact-nav-links { gap: 1.2rem 1.4rem; }
+  .contact-nav-links { gap: 0.7rem; font-size: 0.8rem; }
+  .contact-card { padding: 2.2rem 1.6rem; }
 }
+

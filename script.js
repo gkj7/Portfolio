@@ -38,29 +38,19 @@ function renderProjects() {
   }).join("");
 }
 
-function renderTools() {
-  const grid = document.getElementById("toolsGrid");
-  grid.innerHTML = TOOLS.map((cat) => {
-    const chips = cat.items.map((item) => `<span class="tool-pill">${item}</span>`).join("");
-    return `
-      <div class="tool-card">
-        <h3 class="tool-category">${cat.category}</h3>
-        <div class="tool-pill-row">${chips}</div>
-      </div>
-    `;
-  }).join("");
-}
-
 function renderEducation() {
   const list = document.getElementById("educationList");
   list.innerHTML = EDUCATION.map((e) => `
-    <div class="edu-card">
-      <h3 class="edu-degree">${e.degree}</h3>
-      <p class="edu-institution">${e.institution}</p>
-      <p class="edu-board">${e.board}</p>
-      <div class="edu-meta">
-        <span class="edu-years">${e.years}</span>
-        <span class="edu-score">${e.score}</span>
+    <div class="edu-row">
+      <div class="edu-rail"><span class="edu-dot"></span></div>
+      <div class="edu-card">
+        <h3 class="edu-degree">${e.degree}</h3>
+        <p class="edu-institution">${e.institution}</p>
+        <p class="edu-board">${e.board}</p>
+        <div class="edu-meta">
+          <span class="edu-years">${e.years}</span>
+          <span class="edu-score">${e.score}</span>
+        </div>
       </div>
     </div>
   `).join("");
@@ -74,6 +64,7 @@ function renderCertificates() {
       <h3 class="cert-title">${c.title}</h3>
       <p class="cert-issuer">${c.issuer}</p>
       <p class="cert-date">${c.date}</p>
+      <span class="cert-badge">Certified 🏅</span>
     </a>
   `).join("");
 }
@@ -139,7 +130,6 @@ function renderEvents() {
 renderSkills();
 renderProjects();
 renderResearch();
-renderTools();
 renderEducation();
 renderCertificates();
 renderEvents();
@@ -347,4 +337,107 @@ function startUptimeCounter() {
 }
 
 startUptimeCounter();
+
+/* ============================================================
+   HIDDEN PASSCODE FLIP CARD — key ⇄ passcode form ⇄ QR code.
+   ============================================================ */
+function initPasscodeCard() {
+  const flipCard = document.getElementById("flipCard");
+  const front = document.getElementById("flipCardFront");
+  const digits = Array.from(document.querySelectorAll(".passcode-digit"));
+  const submitBtn = document.getElementById("passcodeSubmit");
+  const messageBox = document.getElementById("passcodeMessage");
+  const qrImage = document.getElementById("qrImage");
+  if (!flipCard || !front || !submitBtn || !messageBox || !qrImage) return;
+
+  const PASSCODE = "HIRE";
+  let solved = false;
+  let messageTimer1 = null;
+  let messageTimer2 = null;
+  let messageTimer3 = null;
+
+  function showMessageSequence(msg1, hold1, msg2, hold2) {
+    clearTimeout(messageTimer1);
+    clearTimeout(messageTimer2);
+    clearTimeout(messageTimer3);
+
+    messageBox.textContent = msg1;
+    messageBox.classList.add("visible");
+
+    messageTimer1 = setTimeout(() => {
+      messageBox.classList.remove("visible");
+      messageTimer2 = setTimeout(() => {
+        messageBox.textContent = msg2;
+        messageBox.classList.add("visible");
+        messageTimer3 = setTimeout(() => {
+          messageBox.classList.remove("visible");
+        }, hold2);
+      }, 350);
+    }, hold1);
+  }
+
+  function clearDigits(focusFirst) {
+    digits.forEach((d) => (d.value = ""));
+    if (focusFirst && digits[0]) digits[0].focus();
+  }
+
+  // Front face: click to flip to the passcode form (only while unsolved).
+  // Once solved, the front face shows the QR and opens the lightbox instead.
+  front.addEventListener("click", () => {
+    if (solved) {
+      const lightbox = document.getElementById("lightbox");
+      const lightboxImg = document.getElementById("lightboxImg");
+      if (lightbox && lightboxImg) {
+        lightboxImg.src = qrImage.src;
+        lightbox.classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+      return;
+    }
+    flipCard.classList.add("flipped");
+    setTimeout(() => digits[0] && digits[0].focus(), 400);
+  });
+
+  // Auto-advance focus across the 4 passcode boxes.
+  digits.forEach((input, i) => {
+    input.addEventListener("input", () => {
+      input.value = input.value.replace(/[^a-zA-Z]/g, "").toUpperCase();
+      if (input.value && i < digits.length - 1) digits[i + 1].focus();
+    });
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Backspace" && !input.value && i > 0) digits[i - 1].focus();
+      if (e.key === "Enter") submitBtn.click();
+    });
+  });
+
+  submitBtn.addEventListener("click", () => {
+    const entered = digits.map((d) => d.value.toUpperCase()).join("");
+
+    if (entered === PASSCODE) {
+      solved = true;
+      flipCard.classList.remove("flipped");
+      flipCard.classList.add("solved");
+      showMessageSequence(
+        "Nice catch.",
+        2000,
+        "Most visitors don't look under the hood.",
+        3000
+      );
+    } else {
+      flipCard.classList.remove("flipped");
+      void flipCard.offsetWidth; // restart animation if triggered again
+      flipCard.classList.add("shake");
+      setTimeout(() => flipCard.classList.remove("shake"), 500);
+      clearDigits(false);
+      showMessageSequence(
+        "Incorrect Passcode.",
+        2000,
+        "Maybe try inspecting your surroundings",
+        3000
+      );
+    }
+  });
+}
+
+initPasscodeCard();
 

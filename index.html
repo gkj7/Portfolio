@@ -1,3 +1,9 @@
+<!--
+#################
+You found the source.
+passcode: H I R E
+#################
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,25 +67,65 @@
   <div class="section-inner">
     <h2 class="reveal">About</h2>
     <div class="tilt-card about-card reveal" data-tilt>
-      <p>
-        Cybersecurity graduate and developer from Kottayam, Kerala, India.
-        B.Tech in Computer Science and Engineering with a specialization in
-        Cybersecurity. I enjoy exploring new technologies, building creative
-        solutions, and going deep into security research and development.
-      </p>
-      <div class="link-chip-row">
-        <a href="mailto:gkj789878@gmail.com" class="link-chip">
-          <span>Email</span>
-        </a>
-        <a href="https://linkedin.com/in/gokul-kj-0b0a68334" target="_blank" rel="noopener" class="link-chip">
-          <span>LinkedIn</span>
-        </a>
-        <a href="https://github.com/gkj7" target="_blank" rel="noopener" class="link-chip">
-          <span>GitHub</span>
-        </a>
-        <a href="assets/Gokul_KJ_Resume.pdf" target="_blank" rel="noopener" class="link-chip link-chip-accent">
-          <span>Resume</span>
-        </a>
+      <div class="about-layout">
+        <div class="about-text">
+          <p>
+            Cybersecurity graduate and developer from Kottayam, Kerala, India.
+            B.Tech in Computer Science and Engineering with a specialization in
+            Cybersecurity. I enjoy exploring new technologies, building creative
+            solutions, and going deep into security research and development.
+          </p>
+          <div class="link-chip-row">
+            <a href="mailto:gkj789878@gmail.com" class="link-chip">
+              <span>📧 Email</span>
+              <span class="link-chip-arrow" aria-hidden="true">→</span>
+            </a>
+            <a href="https://linkedin.com/in/gokul-kj-0b0a68334" target="_blank" rel="noopener" class="link-chip">
+              <span>🌐 LinkedIn</span>
+              <span class="link-chip-arrow" aria-hidden="true">→</span>
+            </a>
+            <a href="https://github.com/gkj7" target="_blank" rel="noopener" class="link-chip">
+              <span>🔗 GitHub</span>
+              <span class="link-chip-arrow" aria-hidden="true">→</span>
+            </a>
+            <a href="assets/Gokul_KJ_Resume.pdf" target="_blank" rel="noopener" class="link-chip link-chip-accent">
+              <span>📄 Resume</span>
+              <span class="link-chip-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="about-side">
+          <div class="flip-card" id="flipCard">
+            <div class="flip-card-inner" id="flipCardInner">
+
+              <div class="flip-card-face flip-card-front" id="flipCardFront">
+                <svg class="key-icon" id="keyIcon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="65" cy="35" r="22"/>
+                  <circle cx="73" cy="27" r="7"/>
+                  <path d="M48 52 L15 85 L15 95 L25 95 L25 88 L32 88 L32 81 L39 81 L39 74 L46 74 L46 67"/>
+                </svg>
+                <svg class="key-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2L9.55 9.55L2 12L9.55 14.45L12 22L14.45 14.45L22 12L14.45 9.55L12 2Z"/>
+                </svg>
+                <img src="assets/gokulkj21_qr.png" alt="GokulKJ21 Instagram QR code" class="qr-image" id="qrImage">
+              </div>
+
+              <div class="flip-card-face flip-card-back">
+                <p class="passcode-label">Enter Hidden Passcode:</p>
+                <div class="passcode-inputs" id="passcodeInputs">
+                  <input type="text" maxlength="1" class="passcode-digit" data-index="0" autocomplete="off">
+                  <input type="text" maxlength="1" class="passcode-digit" data-index="1" autocomplete="off">
+                  <input type="text" maxlength="1" class="passcode-digit" data-index="2" autocomplete="off">
+                  <input type="text" maxlength="1" class="passcode-digit" data-index="3" autocomplete="off">
+                </div>
+                <button class="passcode-submit" id="passcodeSubmit" type="button">Submit</button>
+              </div>
+
+            </div>
+          </div>
+          <div class="passcode-message" id="passcodeMessage"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -127,16 +173,6 @@
   </div>
 </section>
 
-<!-- TOOLS -->
-<section class="section tools" id="tools">
-  <div class="section-inner">
-    <h2 class="reveal">Tools</h2>
-    <div class="tools-card reveal">
-      <div class="tools-grid" id="toolsGrid"></div>
-    </div>
-  </div>
-</section>
-
 <!-- EVENTS & ACHIEVEMENTS -->
 <section class="section events" id="events">
   <div class="section-inner">
@@ -152,30 +188,45 @@
 <!-- CONTACT -->
 <section class="section contact" id="contact">
   <div class="section-inner">
-    <h2 class="reveal">Contact</h2>
-    <div class="contact-footer reveal">
+    <div class="contact-card reveal">
+      <h2 class="contact-heading">Contact</h2>
+      <p class="contact-tagline">
+        Always open to discussing new projects, creative ideas, or opportunities
+        to be part of your vision.
+      </p>
       <div class="contact-icons">
         <a href="https://github.com/gkj7" target="_blank" rel="noopener" class="icon-circle" aria-label="GitHub">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.04-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22 0 1.6-.01 2.89-.01 3.29 0 .32.22.7.83.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/></svg>
         </a>
+        <span class="icon-sep" aria-hidden="true"></span>
         <a href="https://mail.google.com/mail/?view=cm&fs=1&to=gkj789878@gmail.com" target="_blank" rel="noopener" class="icon-circle" aria-label="Email">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h17A1.5 1.5 0 0 1 22 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18.5v-13Zm2.05.5 7.45 5.6a1 1 0 0 0 1 0L19.95 6H4.05ZM4 7.6V18h16V7.6l-7.4 5.55a2.5 2.5 0 0 1-3.2 0L4 7.6Z"/></svg>
         </a>
+        <span class="icon-sep" aria-hidden="true"></span>
         <a href="https://linkedin.com/in/gokul-kj-0b0a68334" target="_blank" rel="noopener" class="icon-circle" aria-label="LinkedIn">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47v6.27ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45Z"/></svg>
         </a>
+        <span class="icon-sep" aria-hidden="true"></span>
         <a href="tel:+916282138210" class="icon-circle" aria-label="Phone">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.2.5 2.5.8 3.8.9.6 0 1 .5 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.1c.6 0 1 .4 1 1 .1 1.3.4 2.6.9 3.8.1.4.1.8-.2 1.1L6.6 10.8Z"/></svg>
         </a>
       </div>
       <nav class="contact-nav-links">
         <a href="#overview">Overview</a>
+        <span class="nav-dot" aria-hidden="true">•</span>
         <a href="#projects">Projects</a>
+        <span class="nav-dot" aria-hidden="true">•</span>
         <a href="#education">Education</a>
+        <span class="nav-dot" aria-hidden="true">•</span>
         <a href="#research">Research</a>
+        <span class="nav-dot" aria-hidden="true">•</span>
         <a href="#certificates">Certificates</a>
       </nav>
-      <p class="contact-copyright">&copy; 2026 All rights reserved. GOKUL K J</p>
+      <div class="contact-divider"></div>
+      <div class="contact-bottom">
+        <p class="contact-copyright">&copy; 2026&nbsp;&nbsp;&nbsp;All rights reserved</p>
+        <p class="contact-name">GOKUL K J</p>
+      </div>
     </div>
   </div>
 </section>
