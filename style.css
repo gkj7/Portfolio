@@ -129,13 +129,20 @@ h2 {
 
 @media (max-width: 860px) {
   .bg-lines-fixed {
-    /* Extend 10% beyond viewport on each side vertically.
-       browser-chrome shift is ~80px max on typical phones (~8-9% of 860px).
-       120% total height gives ~10% buffer top and bottom — more than enough. */
-    top: -10%;
-    bottom: -10%;
+    /* Oversized by 30% on each side vertically — total 160% viewport height.
+       This absorbs any browser-chrome shift (max ~80px) with huge margin.
+       background-position is locked to center so it can't snap/shift when
+       the thumb lifts and the browser chrome re-expands. */
+    top: -30%;
+    bottom: -30%;
+    left: 0;
+    right: 0;
     background-size: cover;
     background-position: center center;
+    /* Disable the breathing animation on mobile — filter changes can
+       trigger repaints that cause the snap effect */
+    animation: none;
+    filter: brightness(1.0);
   }
 }
 
