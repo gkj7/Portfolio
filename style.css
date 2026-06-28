@@ -35,20 +35,11 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html {
   scroll-behavior: smooth;
-  /* Background lives here — on the root element, browsers render it natively
-     without any JS/repaints during scroll, so it never shifts on mobile */
   background-color: var(--bg);
-  background-image: url('assets/bg-ribbon.png');
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  /* breathing animation applied directly */
-  animation: bgBreathe 10s ease-in-out infinite;
 }
 
 body {
-  background: transparent; /* background is on html element */
+  background: transparent;
   color: var(--text);
   font-family: var(--font-display);
   line-height: 1.6;
@@ -116,14 +107,36 @@ h2 {
 
 /* ============================================================
    BACKGROUND RIBBON
-   The image lives on the <html> element (see top of file) so the
-   browser renders it natively — no position:fixed div, no repaints,
-   no shift/blank-space on mobile when browser chrome collapses.
-   The .bg-lines-fixed div is kept in HTML for backwards compat but
-   rendered invisible.
+   Desktop: position:fixed, covers viewport exactly.
+   Mobile: position:fixed but intentionally OVERSIZED (120% tall, centered).
+   The extra height means when the browser chrome collapses and the element
+   shifts slightly, there's always image behind it — no blank edge exposed.
    ============================================================ */
 .bg-lines-fixed {
-  display: none; /* background is now on html element */
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url('assets/bg-ribbon.png');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  animation: bgBreathe 10s ease-in-out infinite;
+}
+
+@media (max-width: 860px) {
+  .bg-lines-fixed {
+    /* Extend 10% beyond viewport on each side vertically.
+       browser-chrome shift is ~80px max on typical phones (~8-9% of 860px).
+       120% total height gives ~10% buffer top and bottom — more than enough. */
+    top: -10%;
+    bottom: -10%;
+    background-size: cover;
+    background-position: center center;
+  }
 }
 
 @keyframes bgBreathe {
