@@ -136,27 +136,43 @@ h2 {
 }
 
 @media (max-width: 860px) {
-  /* Mobile background strategy:
-     Set the image directly on <html> with background-attachment:fixed.
-     On the ROOT element, browsers handle fixed backgrounds at the
-     compositor level — it is painted once and never touched again
-     during scroll or browser-chrome transitions.
-     This gives a true "frozen behind everything" effect with zero snaps. */
+  /* Floating card effect:
+     Background image tiles vertically on <html> covering the full page.
+     Cards/sections have solid dark backgrounds so they sit visibly above it.
+     The bg image peeks through gaps between sections = floating feel.
+     No position:fixed, no vh/vw, no animations = zero snaps ever. */
   html {
     background-color: #0B0B10;
-    background-image: url('assets/bg-ribbon-mobile.png');
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    background-image: url('assets/bg-mobile-full.png');
+    background-size: 100% auto;
+    background-repeat: repeat-y;
+    background-position: center top;
+    background-attachment: scroll;
   }
   body {
     background: transparent;
   }
-  body::before {
-    display: none;
-  }
+  body::before { display: none; }
   .bg-lines-fixed { display: none; }
+
+  /* All cards already have solid var(--surface) backgrounds.
+     Just ensure they stack above the html background. */
+  .overview-card,
+  .about-card,
+  .education-card,
+  .contact-card,
+  .flip-card-face,
+  .terminal-box,
+  .marquee-chip,
+  .events-slider-wrap {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Sections transparent — bg image shows through the gaps between cards */
+  .section {
+    background: transparent;
+  }
 }
 
 @keyframes bgBreathe {
