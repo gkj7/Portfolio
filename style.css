@@ -136,43 +136,14 @@ h2 {
 }
 
 @media (max-width: 860px) {
-  /* Floating card effect:
-     Background image tiles vertically on <html> covering the full page.
-     Cards/sections have solid dark backgrounds so they sit visibly above it.
-     The bg image peeks through gaps between sections = floating feel.
-     No position:fixed, no vh/vw, no animations = zero snaps ever. */
   html {
-    background-color: #0B0B10;
-    background-image: url('assets/bg-mobile-full.png');
-    background-size: 100% auto;
-    background-repeat: repeat-y;
-    background-position: center top;
-    background-attachment: scroll;
+    background: #0B0B10;
   }
   body {
     background: transparent;
   }
   body::before { display: none; }
   .bg-lines-fixed { display: none; }
-
-  /* All cards already have solid var(--surface) backgrounds.
-     Just ensure they stack above the html background. */
-  .overview-card,
-  .about-card,
-  .education-card,
-  .contact-card,
-  .flip-card-face,
-  .terminal-box,
-  .marquee-chip,
-  .events-slider-wrap {
-    position: relative;
-    z-index: 2;
-  }
-
-  /* Sections transparent — bg image shows through the gaps between cards */
-  .section {
-    background: transparent;
-  }
 }
 
 @keyframes bgBreathe {
