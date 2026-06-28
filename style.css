@@ -136,36 +136,26 @@ h2 {
 }
 
 @media (max-width: 860px) {
-  /* On mobile: no position:fixed anywhere near the background.
-     Instead, a ::before pseudo-element sits at the very top of body,
-     position:absolute, exactly 130vh tall. The image fills it with cover.
-     Because it's absolute (not fixed), the browser never recalculates it
-     when the chrome collapses — zero snaps, zero shifts.
-     130vh means the image is taller than any phone viewport so the
-     bottom edge never shows even if the page shifts a little. */
+  /* Mobile background strategy:
+     Set the image directly on <html> with background-attachment:fixed.
+     On the ROOT element, browsers handle fixed backgrounds at the
+     compositor level — it is painted once and never touched again
+     during scroll or browser-chrome transitions.
+     This gives a true "frozen behind everything" effect with zero snaps. */
   html {
-    background: #0B0B10;
+    background-color: #0B0B10;
+    background-image: url('assets/bg-ribbon-mobile.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
   }
   body {
     background: transparent;
-    position: relative;
   }
   body::before {
-    content: '';
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 1200px; /* fixed px — never recalculates on chrome resize */
-    background-image: url('assets/bg-ribbon-mobile.png');
-    background-size: cover;
-    background-position: center top;
-    background-repeat: no-repeat;
-    z-index: 0;
-    pointer-events: none;
+    display: none;
   }
-  /* Make sure all sections sit above the pseudo bg */
   .bg-lines-fixed { display: none; }
 }
 
