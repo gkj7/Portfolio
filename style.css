@@ -80,7 +80,7 @@ a { color: inherit; text-decoration: none; }
   z-index: 2;
   scroll-margin-top: 30px;
 }
-.section-inner { max-width: 1080px; margin: 0 auto; }
+.section-inner { max-width: 1080px; width: 100%; margin: 0 auto; }
 
 h2 {
   font-size: clamp(1.6rem, 3vw, 2.1rem);
@@ -159,6 +159,10 @@ h2 {
   position: relative;
   overflow: hidden;
 }
+@media (max-width: 640px) {
+  .overview-card { padding: 1.75rem 1.5rem 2.5rem; }
+}
+
 .overview-card:hover { border-color: var(--border-accent); }
 
 .status-bar {
@@ -183,7 +187,15 @@ h2 {
 .status-secure { color: #3ED98A; font-weight: 600; }
 
 @media (max-width: 640px) {
-  .status-bar { font-size: 0.6rem; letter-spacing: 0.04em; gap: 0.4rem; }
+  .status-bar { font-size: 0.65rem; letter-spacing: 0.04em; gap: 0.4rem; flex-wrap: wrap; row-gap: 0.4rem; justify-content: center; }
+  .status-item { flex: 0 1 auto; }
+}
+
+@media (max-width: 480px) {
+  .status-bar { flex-direction: column; align-items: center; gap: 0.35rem; font-size: 0.62rem; }
+  .status-item,
+  .status-item:first-child,
+  .status-item:last-child { text-align: center; }
 }
 
 .overview-inner {

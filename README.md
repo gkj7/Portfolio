@@ -1,7 +1,16 @@
-Personal portfolio website.
+# Gokul K J — Portfolio
+
+Personal portfolio website for Gokul K J, a Cybersecurity graduate and developer. Built with plain HTML, CSS, and JavaScript — no framework, no build step.
 
 🔗 Live site: [gokulkj.vercel.app](https://gokulkj.vercel.app)
 
+## Features
+
+- Animated overview/status panel (uptime clock, "SECURE" status, last scan)
+- Skills, education, certifications, and research publication sections
+- Project showcase with tags and GitHub links
+- Event gallery
+- Downloadable resume
 
 ## Tech Stack
 
@@ -21,6 +30,11 @@ portfolio-v3/
 └── assets/         # Images, certificates, resume, and other PDFs
 ```
 
+## Editing Content
+
+Most of the personal content (skills, education, certifications, projects, research) lives in **`data.js`** as plain JavaScript arrays/objects — update the values there to change what's shown on the site, no need to touch the HTML.
+
+To update the resume, replace `assets/Gokul_KJ_Resume.pdf` with a new file of the same name (or update the link in `index.html` if you rename it).
 
 ## Running Locally
 
@@ -34,7 +48,7 @@ No build tools needed. Either:
 
 ## Deployment
 
-Deployed on Vercel as a static site.
+Deployed on Vercel as a static site — push to the connected repo/branch, or drag-and-drop the folder into the Vercel dashboard.
 
 ## Contact
 
