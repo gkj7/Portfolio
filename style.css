@@ -129,18 +129,16 @@ h2 {
 
 @media (max-width: 860px) {
   .bg-lines-fixed {
-    /* Oversized by 30% on each side vertically — total 160% viewport height.
-       This absorbs any browser-chrome shift (max ~80px) with huge margin.
-       background-position is locked to center so it can't snap/shift when
-       the thumb lifts and the browser chrome re-expands. */
-    top: -30%;
-    bottom: -30%;
+    /* Use fixed px values — NOT percentages. Percentage top/bottom are
+       relative to viewport height, so they recalculate when the browser
+       chrome appears/disappears, causing the snap. Fixed px never changes.
+       200px overhang top + bottom is far more than any browser chrome height. */
+    top: -200px;
+    bottom: -200px;
     left: 0;
     right: 0;
     background-size: cover;
     background-position: center center;
-    /* Disable the breathing animation on mobile — filter changes can
-       trigger repaints that cause the snap effect */
     animation: none;
     filter: brightness(1.0);
   }
