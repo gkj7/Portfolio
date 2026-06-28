@@ -107,40 +107,44 @@ h2 {
 
 /* ============================================================
    BACKGROUND RIBBON
-   Desktop: position:fixed, covers viewport exactly.
-   Mobile: position:fixed but intentionally OVERSIZED (120% tall, centered).
-   The extra height means when the browser chrome collapses and the element
-   shifts slightly, there's always image behind it — no blank edge exposed.
+   Desktop: position:fixed — stays locked to viewport while scrolling.
+   Mobile: position:absolute on html, background-attachment:scroll.
+   The key insight: position:fixed on mobile always snaps when the
+   browser chrome (address bar) appears/disappears because the browser
+   recalculates the fixed element's position after the chrome animation.
+   On mobile we instead set the background directly on the html element
+   itself with background-size covering 100% — the browser composites
+   the root background natively without any snap or repaint.
    ============================================================ */
 .bg-lines-fixed {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image: url('assets/bg-ribbon.png');
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  animation: bgBreathe 10s ease-in-out infinite;
+  display: none; /* image handled via html/body on mobile, and here on desktop */
+}
+
+@media (min-width: 861px) {
+  .bg-lines-fixed {
+    display: block;
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: url('assets/bg-ribbon.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    animation: bgBreathe 10s ease-in-out infinite;
+  }
 }
 
 @media (max-width: 860px) {
-  .bg-lines-fixed {
-    /* Use fixed px values — NOT percentages. Percentage top/bottom are
-       relative to viewport height, so they recalculate when the browser
-       chrome appears/disappears, causing the snap. Fixed px never changes.
-       200px overhang top + bottom is far more than any browser chrome height. */
-    top: -200px;
-    bottom: -200px;
-    left: 0;
-    right: 0;
+  html {
+    /* On mobile the background lives here — painted by the browser at the
+       OS compositor level, completely outside the scroll/fixed machinery.
+       No position:fixed = no snap. Ever. */
+    background-image: url('assets/bg-ribbon.png');
     background-size: cover;
     background-position: center center;
-    animation: none;
-    filter: brightness(1.0);
+    background-repeat: no-repeat;
+    background-attachment: local;
   }
 }
 
