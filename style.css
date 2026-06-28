@@ -42,7 +42,8 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-  position: relative;
+  /* position: relative removed — on iOS/Android it breaks the fixed-position
+     stacking context, causing position:fixed children to scroll with the page */
 }
 
 a { color: inherit; text-decoration: none; }
@@ -114,10 +115,7 @@ h2 {
   right: 0;
   bottom: 0;
   left: 0;
-  /* No explicit height/width — inset 0 on all four sides stretches the element
-     to fill the visual viewport continuously, even while mobile browser chrome
-     is mid-animation. dvh/svh/vh only update AFTER the chrome finishes moving,
-     causing a blank-gap flash; inset-based sizing has no such delay. */
+  /* Inset 0 on all sides — stretches continuously with viewport, no vh units */
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
@@ -126,6 +124,13 @@ h2 {
   background-position: center center;
   background-repeat: no-repeat;
   animation: bgBreathe 10s ease-in-out infinite;
+  /* Force GPU compositing layer — prevents mid-scroll repaint flashes on mobile */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: filter;
+  /* Prevent iOS from treating this as a scrollable region */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 @keyframes bgBreathe {
