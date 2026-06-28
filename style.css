@@ -111,17 +111,19 @@ h2 {
 .bg-lines-fixed {
   position: fixed;
   top: 0;
+  right: 0;
+  bottom: 0;
   left: 0;
-  width: 100%;
-  height: 100vh;        /* base fallback */
-  height: 100dvh;       /* dynamic viewport height — updates as mobile browser chrome collapses/expands */
-  min-height: 100%;     /* belt-and-suspenders: never shorter than the viewport */
+  /* No explicit height/width — inset 0 on all four sides stretches the element
+     to fill the visual viewport continuously, even while mobile browser chrome
+     is mid-animation. dvh/svh/vh only update AFTER the chrome finishes moving,
+     causing a blank-gap flash; inset-based sizing has no such delay. */
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
   background-image: url('assets/bg-ribbon.png');
   background-size: cover;
-  background-position: center top; /* anchor to top so image doesn't drift down leaving a gap at bottom */
+  background-position: center center;
   background-repeat: no-repeat;
   animation: bgBreathe 10s ease-in-out infinite;
 }
