@@ -136,14 +136,15 @@ h2 {
 }
 
 /* ============================================================
-   MOBILE BACKGROUND IMG
-   Real <img> element instead of CSS background-image. Images are
-   composited by the browser's media pipeline (like <video>/<canvas>),
-   not the CSS background-paint pipeline — so they don't get caught
-   up in the repaint cycle that happens when the browser chrome
-   (address bar) collapses/expands during scroll. No snaps.
+   MOBILE BACKGROUND CANVAS
+   Mirrors Vanta.js/Three.js's approach: a <canvas> whose pixel
+   buffer is explicitly resized and redrawn via JS on every
+   'resize' event (script.js), rather than relying on CSS layout
+   recalculation. This is what lets WebGL-based backgrounds like
+   Vanta avoid the mobile address-bar snap — same principle here,
+   just with a static image instead of an animated WebGL scene.
    ============================================================ */
-.bg-mobile-img {
+.bg-mobile-canvas {
   display: none;
 }
 
@@ -154,14 +155,10 @@ h2 {
   body::before { display: none; }
   .bg-lines-fixed { display: none; }
 
-  .bg-mobile-img {
-    display: block;
+  .bg-mobile-canvas {
     position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center center;
+    top: 0;
+    left: 0;
     z-index: 0;
     pointer-events: none;
     user-select: none;

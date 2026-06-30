@@ -441,3 +441,89 @@ function initPasscodeCard() {
 
 initPasscodeCard();
 
+
+/* ============================================================
+   MOBILE BACKGROUND — Canvas-based, resize-driven (no CSS snap)
+   Mirrors how Vanta.js/Three.js avoids the mobile address-bar
+   snap: instead of relying on CSS background-position/size which
+   gets recalculated by the layout engine on viewport change, we
+   draw the image into a <canvas> ourselves and explicitly redraw
+   it on every 'resize' event (which fires continuously as the
+   browser chrome collapses/expands, not just at the end).
+   This keeps the canvas's pixel buffer in sync with the real
+   viewport size at all times, eliminating the snap entirely.
+   ============================================================ */
+(function initMobileBgCanvas() {
+  const canvas = document.getElementById('bgMobileCanvas');
+  if (!canvas) return;
+
+  const isMobile = () => window.matchMedia('(max-width: 860px)').matches;
+
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  img.src = 'assets/bg-mobile-img.png';
+
+  let imgLoaded = false;
+  img.onload = () => {
+    imgLoaded = true;
+    draw();
+  };
+
+  function draw() {
+    if (!isMobile()) {
+      canvas.style.display = 'none';
+      return;
+    }
+    canvas.style.display = 'block';
+
+    // Use the LARGEST possible viewport dimensions available to avoid
+    // ever drawing too small a canvas right as the browser chrome hides.
+    const w = Math.max(window.innerWidth, document.documentElement.clientWidth);
+    const h = Math.max(window.innerHeight, document.documentElement.clientHeight, window.screen.height);
+
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+
+    if (!imgLoaded) return;
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+
+    // cover-fit calculation
+    const imgRatio = img.naturalWidth / img.naturalHeight;
+    const targetRatio = w / h;
+    let drawW, drawH, offsetX, offsetY;
+
+    if (imgRatio > targetRatio) {
+      drawH = h;
+      drawW = h * imgRatio;
+      offsetX = (w - drawW) / 2;
+      offsetY = 0;
+    } else {
+      drawW = w;
+      drawH = w / imgRatio;
+      offsetX = 0;
+      offsetY = (h - drawH) / 2;
+    }
+
+    ctx.drawImage(img, offsetX, offsetY, drawW, drawH);
+  }
+
+  // Redraw on every resize tick — fires continuously during the
+  // mobile chrome collapse/expand animation, not just once at the end.
+  window.addEventListener('resize', draw, { passive: true });
+
+  // visualViewport fires more granular events on mobile during chrome
+  // transitions — use it too if available for maximum responsiveness.
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', draw, { passive: true });
+    window.visualViewport.addEventListener('scroll', draw, { passive: true });
+  }
+
+  window.addEventListener('orientationchange', draw);
+
+  draw();
+})();
