@@ -135,15 +135,37 @@ h2 {
   }
 }
 
+/* ============================================================
+   MOBILE BACKGROUND IMG
+   Real <img> element instead of CSS background-image. Images are
+   composited by the browser's media pipeline (like <video>/<canvas>),
+   not the CSS background-paint pipeline — so they don't get caught
+   up in the repaint cycle that happens when the browser chrome
+   (address bar) collapses/expands during scroll. No snaps.
+   ============================================================ */
+.bg-mobile-img {
+  display: none;
+}
+
 @media (max-width: 860px) {
-  html {
+  html, body {
     background: #0B0B10;
-  }
-  body {
-    background: transparent;
   }
   body::before { display: none; }
   .bg-lines-fixed { display: none; }
+
+  .bg-mobile-img {
+    display: block;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+  }
 }
 
 @keyframes bgBreathe {
